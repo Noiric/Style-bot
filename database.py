@@ -17,7 +17,10 @@ class Products(Base):
     name = Column(String, nullable=False)
     description = Column(Text, nullable=False)
     price = Column(Float, nullable=False, default=100.0)
-    image = Column(String, default="")
+    count = Column(Integer, nullable=False)
+    image = Column(String, nullable=False)
+    category_season = Column(String, nullable=False)
+    category_clothing = Column(String, nullable=False)
 
 
 engine = create_engine(config.DB_PATH, echo=config.DEBUG)
