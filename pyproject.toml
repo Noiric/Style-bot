@@ -1,0 +1,20 @@
+[tool.poetry]
+name = "style-bot"
+version = "0.1.0"
+description = ""
+authors = ["Dima2024-python <chagaydapython2024@gmail.com>"]
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.12"
+fastapi = {extras = ["all"], version = "^0.115.12"}
+telebot = "^0.0.5"
+black = "^25.1.0"
+flake8 = "^7.2.0"
+dotenv = {extras = ["all"], version = "^0.9.9"}
+sqlalchemy = {extras = ["all"], version = "^2.0.40"}
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
