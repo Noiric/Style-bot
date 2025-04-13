@@ -18,7 +18,14 @@ def create_product(name: str, description: str, price: float, image, count: int,
     return product
 
 
-def get_all_product() -> list[Products]:
+class NewProduct(BaseModel):
+    name: str = Field(max_length=100, min_length=2)
+    description: str = Field(max_length=100)
+    price: float = Field(ge=0.01)
+    image: HttpUrl
+
+
+def get_all_product() -> list[NewProduct]:
     products = session.query(Products).all()
     return products
 
