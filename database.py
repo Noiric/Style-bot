@@ -19,6 +19,7 @@ class Products(Base):
     price = Column(Float, nullable=False, default=100.0)
     count = Column(Integer, nullable=False)
     image = Column(String, nullable=False)
+    brand = Column(String, nullable=False)
     category_season = Column(String, nullable=False)
     category_clothing = Column(String, nullable=False)
 

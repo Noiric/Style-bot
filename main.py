@@ -51,7 +51,7 @@ def help_or_self(message):
         bot.register_next_step_handler(message, search_or_all)
 
     if message.text == 'Допомога продавця':
-        bot.send_message(message.chat.id, text=texts.help_text, reply_markup=keyboards.keyboard_back_2)
+        bot.send_message(message.chat.id, text=texts.help_text, reply_markup=keyboards.keyboard_back)
         bot.register_next_step_handler(message, help_or_self)
 
     if message.text == 'На попередню сторінку':
@@ -94,7 +94,7 @@ def all_products(message):
         bot.register_next_step_handler(message, search)
 
     if message.text == 'Допомога':
-        bot.send_message(message.chat.id, text=texts.help_text, reply_markup=keyboards.keyboard_back_2)
+        bot.send_message(message.chat.id, text=texts.help_text, reply_markup=keyboards.keyboard_back)
         bot.register_next_step_handler(message, help_from_all)
 
     if message.text == 'На попередню сторінку':
@@ -121,7 +121,91 @@ def help_from_all(message):
 
 
 def search(message):
-    pass
+    if message.text == 'На попередню сторінку':
+        bot.send_message(message.chat.id, text=texts.all_or_search, reply_markup=keyboards.keyboard_3)
+        bot.register_next_step_handler(message, search_or_all)
+
+    if message.text == 'На головну':
+        bot.send_message(message.chat.id, text=texts.hello_text, reply_markup=keyboards.keyboard1)
+        bot.register_next_step_handler(message, his_prod_med)
+
+    if message.text == 'За брендом':
+        bot.send_message(message.chat.id, text=texts.search_by_brand, reply_markup=keyboards.keyboard_back)
+        bot.register_next_step_handler(message, search_by_brand)
+
+    if message.text == 'За сезонністю':
+        bot.send_message(message.chat.id, text=texts.search_by_season, reply_markup=keyboards.keyboard_back)
+        bot.register_next_step_handler(message, search_by_season)
+
+    if message.text == 'За типом одягу':
+        bot.send_message(message.chat.id, text=texts.search_by_type, reply_markup=keyboards.keyboard_back)
+        bot.register_next_step_handler(message, search_by_type)
+
+
+def search_by_brand(message):
+    if message.text == 'На попередню сторінку':
+        bot.send_message(message.chat.id, text=texts.search_text, reply_markup=keyboards.keyboard_search)
+        bot.register_next_step_handler(message, search)
+
+    elif message.text == 'На головну':
+        bot.send_message(message.chat.id, text=texts.hello_text, reply_markup=keyboards.keyboard1)
+        bot.register_next_step_handler(message, his_prod_med)
+
+    else:
+        products = dao.get_product_by_brand(message.text)
+        if products:
+            for product in products:
+                product_post(message, product)
+            bot.send_message(message.chat.id, text=texts.after_search, reply_markup=keyboards.keyboard_back)
+            bot.register_next_step_handler(message, search_by_brand)
+
+        else:
+            bot.send_message(message.chat.id, text=texts.negative_search, reply_markup=keyboards.keyboard_back)
+            bot.register_next_step_handler(message, search_by_brand)
+
+
+def search_by_season(message):
+    if message.text == 'На попередню сторінку':
+        bot.send_message(message.chat.id, text=texts.search_text, reply_markup=keyboards.keyboard_search)
+        bot.register_next_step_handler(message, search)
+
+    elif message.text == 'На головну':
+        bot.send_message(message.chat.id, text=texts.hello_text, reply_markup=keyboards.keyboard1)
+        bot.register_next_step_handler(message, his_prod_med)
+
+    else:
+        products = dao.get_product_by_season(message.text)
+        if products:
+            for product in products:
+                product_post(message, product)
+            bot.send_message(message.chat.id, text=texts.after_search, reply_markup=keyboards.keyboard_back)
+            bot.register_next_step_handler(message, search_by_season)
+
+        else:
+            bot.send_message(message.chat.id, text=texts.negative_search, reply_markup=keyboards.keyboard_back)
+            bot.register_next_step_handler(message, search_by_season)
+
+
+def search_by_type(message):
+    if message.text == 'На попередню сторінку':
+        bot.send_message(message.chat.id, text=texts.search_text, reply_markup=keyboards.keyboard_search)
+        bot.register_next_step_handler(message, search)
+
+    elif message.text == 'На головну':
+        bot.send_message(message.chat.id, text=texts.hello_text, reply_markup=keyboards.keyboard1)
+        bot.register_next_step_handler(message, his_prod_med)
+
+    else:
+        products = dao.get_product_by_type(message.text)
+        if products:
+            for product in products:
+                product_post(message, product)
+            bot.send_message(message.chat.id, text=texts.after_search, reply_markup=keyboards.keyboard_back)
+            bot.register_next_step_handler(message, search_by_season)
+
+        else:
+            bot.send_message(message.chat.id, text=texts.negative_search, reply_markup=keyboards.keyboard_back)
+            bot.register_next_step_handler(message, search_by_season)
 
 
 bot.infinity_polling()
