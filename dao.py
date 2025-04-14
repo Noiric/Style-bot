@@ -36,9 +36,13 @@ def get_product_by_brand(product_brand: str) -> list[Products] | None:
     return product
 
 
-def get_product_by_price_diapason(min_price: int | float, max_price: int | float) -> list[Products] | None:
-    product = session.query(Products).filter(float(max_price) > Products.price > float(min_price)).all()
-    return product
+def get_product_by_price_diapason(min_price, max_price) -> list[Products] | None:
+    products = []
+    product = session.query(Products).all()
+    for prod in product:
+        if float(min_price) <= prod.price <= float(max_price):
+            products.append(prod)
+    return products
 
 
 def get_product_by_season(product_season: str) -> list[Products] | None:
