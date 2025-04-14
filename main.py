@@ -32,15 +32,20 @@ def his_prod_med(message):
         bot.send_message(message.chat.id, text=texts.history, reply_markup=keyboards.keyboard_back_1)
         bot.register_next_step_handler(message, his_prod_med)
 
-    if message.text == 'Пошук товарів':
+    elif message.text == 'Пошук товарів':
         bot.send_message(message.chat.id, text=texts.help_or_self, reply_markup=keyboards.keyboard_2)
         bot.register_next_step_handler(message, help_or_self)
 
-    if message.text == 'Наші соціальні мережі':
+    elif message.text == 'Наші соціальні мережі':
         bot.send_message(message.chat.id, text=texts.media_text, reply_markup=keyboards.keyboard_back_1)
         bot.register_next_step_handler(message, his_prod_med)
 
-    if message.text == 'На попередню сторінку':
+    elif message.text == 'На попередню сторінку':
+        bot.send_message(message.chat.id, text=texts.hello_text, reply_markup=keyboards.keyboard1)
+        bot.register_next_step_handler(message, his_prod_med)
+
+    else:
+        bot.send_message(message.chat.id, text=texts.negative_command, reply_markup=keyboards.keyboard1)
         bot.send_message(message.chat.id, text=texts.hello_text, reply_markup=keyboards.keyboard1)
         bot.register_next_step_handler(message, his_prod_med)
 
@@ -50,17 +55,22 @@ def help_or_self(message):
         bot.send_message(message.chat.id, text=texts.all_or_search, reply_markup=keyboards.keyboard_3)
         bot.register_next_step_handler(message, search_or_all)
 
-    if message.text == 'Допомога продавця':
+    elif message.text == 'Допомога продавця':
         bot.send_message(message.chat.id, text=texts.help_text, reply_markup=keyboards.keyboard_back)
         bot.register_next_step_handler(message, help_or_self)
 
-    if message.text == 'На попередню сторінку':
+    elif message.text == 'На попередню сторінку':
         bot.send_message(message.chat.id, text=texts.help_or_self, reply_markup=keyboards.keyboard_2)
         bot.register_next_step_handler(message, help_or_self)
 
-    if message.text == 'На головну':
+    elif message.text == 'На головну':
         bot.send_message(message.chat.id, text=texts.hello_text, reply_markup=keyboards.keyboard1)
         bot.register_next_step_handler(message, his_prod_med)
+
+    else:
+        bot.send_message(message.chat.id, text=texts.negative_command)
+        bot.send_message(message.chat.id, text=texts.help_or_self, reply_markup=keyboards.keyboard_2)
+        bot.register_next_step_handler(message, help_or_self)
 
 
 def search_or_all(message):
@@ -68,50 +78,67 @@ def search_or_all(message):
         products = dao.get_all_product()
         for product in products:
             product_post(message, product)
-        bot.send_message(message.chat.id, text='Для пошуку окремого виду товару, перейдіть до пошуку',
+        bot.send_message(message.chat.id, text=f'{texts.all_products}\n\n'
+                                               f'Для пошуку окремого виду товару, перейдіть до пошуку',
                          reply_markup=keyboards.keyboard_all_products)
         bot.register_next_step_handler(message, all_products)
 
-    if message.text == 'Пошук':
+    elif message.text == 'Пошук':
         bot.send_message(message.chat.id, text=texts.search_text, reply_markup=keyboards.keyboard_search)
         bot.register_next_step_handler(message, search)
 
-    if message.text == 'На попередню сторінку':
+    elif message.text == 'На попередню сторінку':
         bot.send_message(message.chat.id, text=texts.help_or_self, reply_markup=keyboards.keyboard_2)
         bot.register_next_step_handler(message, help_or_self)
 
-    if message.text == 'На головну':
+    elif message.text == 'На головну':
         bot.send_message(message.chat.id, text=texts.hello_text, reply_markup=keyboards.keyboard1)
         bot.register_next_step_handler(message, his_prod_med)
+
+    else:
+        bot.send_message(message.chat.id, text=texts.negative_command)
+        bot.send_message(message.chat.id, text=texts.all_or_search, reply_markup=keyboards.keyboard_3)
+        bot.register_next_step_handler(message, search_or_all)
 
 
 def all_products(message):
     if message.text == 'Замовити':
-        bot.send_message(message.chat.id, text=texts.buy_text, reply_markup=keyboards.buy_keyboard)
+        bot.send_message(message.chat.id, text=texts.buy_text, reply_markup=keyboards.keyboard_back)
+        bot.register_next_step_handler(message, buy_order)
 
-    if message.text == 'Пошук':
+    elif message.text == 'Пошук':
         bot.send_message(message.chat.id, text=texts.search_text, reply_markup=keyboards.keyboard_search)
         bot.register_next_step_handler(message, search)
 
-    if message.text == 'Допомога':
+    elif message.text == 'Допомога':
         bot.send_message(message.chat.id, text=texts.help_text, reply_markup=keyboards.keyboard_back)
         bot.register_next_step_handler(message, help_from_all)
 
-    if message.text == 'На попередню сторінку':
+    elif message.text == 'На попередню сторінку':
         bot.send_message(message.chat.id, text=texts.all_or_search, reply_markup=keyboards.keyboard_3)
         bot.register_next_step_handler(message, search_or_all)
 
+    elif message.text == 'На головну':
+        bot.send_message(message.chat.id, text=texts.hello_text, reply_markup=keyboards.keyboard1)
+        bot.register_next_step_handler(message, his_prod_med)
+
+    else:
+        bot.send_message(message.chat.id, text=texts.negative_command)
+        products = dao.get_all_product()
+        for product in products:
+            product_post(message, product)
+        bot.send_message(message.chat.id, text=f'{texts.all_products}\n\n'
+                                               f'Для пошуку окремого виду товару, перейдіть до пошуку',
+                         reply_markup=keyboards.keyboard_all_products)
+        bot.register_next_step_handler(message, all_products)
+
+
+def buy_order(message):
     if message.text == 'На головну':
         bot.send_message(message.chat.id, text=texts.hello_text, reply_markup=keyboards.keyboard1)
         bot.register_next_step_handler(message, his_prod_med)
 
-
-def help_from_all(message):
-    if message.text == 'На головну':
-        bot.send_message(message.chat.id, text=texts.hello_text, reply_markup=keyboards.keyboard1)
-        bot.register_next_step_handler(message, his_prod_med)
-
-    if message.text == 'На попередню сторінку':
+    elif message.text == 'На попередню сторінку':
         products = dao.get_all_product()
         for product in products:
             product_post(message, product)
@@ -119,27 +146,56 @@ def help_from_all(message):
                          reply_markup=keyboards.keyboard_all_products)
         bot.register_next_step_handler(message, all_products)
 
+    else:
+        bot.send_message(message.chat.id, text=texts.negative_command)
+        bot.send_message(message.chat.id, text=texts.buy_text, reply_markup=keyboards.keyboard_back)
+        bot.register_next_step_handler(message, buy_order)
+
+
+def help_from_all(message):
+    if message.text == 'На головну':
+        bot.send_message(message.chat.id, text=texts.hello_text, reply_markup=keyboards.keyboard1)
+        bot.register_next_step_handler(message, his_prod_med)
+
+    elif message.text == 'На попередню сторінку':
+        products = dao.get_all_product()
+        for product in products:
+            product_post(message, product)
+        bot.send_message(message.chat.id, text='Для пошуку окремого виду товару, перейдіть до пошуку',
+                         reply_markup=keyboards.keyboard_all_products)
+        bot.register_next_step_handler(message, all_products)
+
+    else:
+        bot.send_message(message.chat.id, text=texts.negative_command)
+        bot.send_message(message.chat.id, text=texts.help_text, reply_markup=keyboards.keyboard_back)
+        bot.register_next_step_handler(message, help_from_all)
+
 
 def search(message):
     if message.text == 'На попередню сторінку':
         bot.send_message(message.chat.id, text=texts.all_or_search, reply_markup=keyboards.keyboard_3)
         bot.register_next_step_handler(message, search_or_all)
 
-    if message.text == 'На головну':
+    elif message.text == 'На головну':
         bot.send_message(message.chat.id, text=texts.hello_text, reply_markup=keyboards.keyboard1)
         bot.register_next_step_handler(message, his_prod_med)
 
-    if message.text == 'За брендом':
+    elif message.text == 'За брендом':
         bot.send_message(message.chat.id, text=texts.search_by_brand, reply_markup=keyboards.keyboard_back)
         bot.register_next_step_handler(message, search_by_brand)
 
-    if message.text == 'За сезонністю':
+    elif message.text == 'За сезонністю':
         bot.send_message(message.chat.id, text=texts.search_by_season, reply_markup=keyboards.keyboard_back)
         bot.register_next_step_handler(message, search_by_season)
 
-    if message.text == 'За типом одягу':
+    elif message.text == 'За типом одягу':
         bot.send_message(message.chat.id, text=texts.search_by_type, reply_markup=keyboards.keyboard_back)
         bot.register_next_step_handler(message, search_by_type)
+
+    else:
+        bot.send_message(message.chat.id, text=texts.negative_command)
+        bot.send_message(message.chat.id, text=texts.search_text, reply_markup=keyboards.keyboard_search)
+        bot.register_next_step_handler(message, search)
 
 
 def search_by_brand(message):
@@ -201,11 +257,11 @@ def search_by_type(message):
             for product in products:
                 product_post(message, product)
             bot.send_message(message.chat.id, text=texts.after_search, reply_markup=keyboards.keyboard_back)
-            bot.register_next_step_handler(message, search_by_season)
+            bot.register_next_step_handler(message, search_by_type)
 
         else:
             bot.send_message(message.chat.id, text=texts.negative_search, reply_markup=keyboards.keyboard_back)
-            bot.register_next_step_handler(message, search_by_season)
+            bot.register_next_step_handler(message, search_by_type)
 
 
 bot.infinity_polling()

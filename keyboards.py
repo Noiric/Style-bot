@@ -36,7 +36,6 @@ keyboard_3 = types.ReplyKeyboardMarkup(resize_keyboard=True).add(
 keyboard_search = types.ReplyKeyboardMarkup(resize_keyboard=True).add(
     types.KeyboardButton(text='За сезонністю'),
     types.KeyboardButton(text='За типом одягу'),
-    types.KeyboardButton(text='За ціною'),
     types.KeyboardButton(text='За брендом'),
     types.KeyboardButton(text='На попередню сторінку'),
     types.KeyboardButton(text='На головну')
@@ -48,9 +47,4 @@ keyboard_all_products = types.ReplyKeyboardMarkup(resize_keyboard=True).add(
                            types.KeyboardButton(text='Допомога'),
                            types.KeyboardButton(text='На попередню сторінку'),
                            types.KeyboardButton(text='На головну')
-)
-
-buy_keyboard = types.ReplyKeyboardMarkup(resize_keyboard=True).add(
-    types.KeyboardButton(text='На попередню сторінку'),
-    types.KeyboardButton(text='На головну')
 )
